@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Salmon Dadamatov</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #050505;
+    --ink: #f2f2f0;
+    --muted: #7a7a7a;
+    --hair: rgba(255,255,255,0.10);
+    --glass: rgba(255,255,255,0.035);
+    --glass-strong: rgba(255,255,255,0.07);
+    --accent: #2f7bff;
+    --accent2: #66a3ff;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  body{
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x:hidden;
+    min-height:100vh;
+    position:relative;
+  }
+ 
+  /* grid backdrop */
+  .grid-bg{
+    position:fixed; inset:0;
+    z-index:0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 40%, transparent 100%);
+  }
+  .glow{
+    position:fixed;
+    top:-200px; left:50%;
+    transform: translateX(-50%);
+    width: 900px; height:560px;
+    background: radial-gradient(ellipse at center, rgba(47,123,255,0.20), transparent 65%);
+    z-index:0;
+    pointer-events:none;
+  }
+  .grain{
+    position:fixed; inset:0;
+    pointer-events:none;
+    opacity:0.045;
+    z-index:1;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+ 
+  .wrap{
+    position:relative;
+    z-index:2;
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 48px 22px 40px;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+ 
+  .top-tag{
+    display:flex; align-items:center; justify-content:space-between;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color: var(--muted);
+    margin-bottom: 50px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .top-tag .status{ display:flex; align-items:center; gap:8px; }
+  .top-tag .dot{
+    width:6px; height:6px;
+    background: var(--accent);
+    box-shadow: 0 0 10px rgba(47,123,255,0.8);
+  }
+ 
+  .hero{ margin-bottom: 46px; }
+ 
+  .id-line{
+    display:flex; align-items:center; gap:10px;
+    margin-bottom: 20px;
+  }
+  .id-line .bracket{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    color: var(--accent);
+    letter-spacing:0.1em;
+  }
+  .id-line span.label{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color: var(--muted);
+  }
+ 
+  .name{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size: clamp(38px, 10.5vw, 58px);
+    line-height:1.0;
+    letter-spacing:-0.02em;
+    text-transform:uppercase;
+  }
+  .name .last{ color: rgba(255,255,255,0.42); }
+ 
+  .tagline{
+    margin-top: 18px;
+    font-size: 14px;
+    line-height:1.65;
+    color: var(--muted);
+    max-width: 420px;
+    border-left: 2px solid var(--accent);
+    padding-left: 14px;
+  }
+ 
+  .section-tag{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color: var(--muted);
+    margin-bottom:16px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .section-tag::before{
+    content:"";
+    width:8px; height:8px;
+    border: 1px solid var(--accent);
+  }
+ 
+  .chip-grid{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-bottom: 40px;
+  }
+  .chip{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 18px 20px;
+    background: var(--glass);
+    border: 1px solid var(--hair);
+    text-decoration:none;
+    color: var(--ink);
+    backdrop-filter: blur(8px);
+    transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+  }
+  .chip:hover{
+    background: var(--glass-strong);
+    border-color: rgba(47,123,255,0.45);
+    transform: translateX(4px);
+  }
+  .chip:hover .chip-arrow{ transform: translate(3px,-3px); color: var(--accent); }
+  .chip:hover .chip-icon{ border-color: var(--accent); }
+ 
+  .chip-left{ display:flex; align-items:center; gap:14px; }
+  .chip-icon{
+    width:40px; height:40px;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+    border: 1px solid var(--hair);
+    background: var(--brand, rgba(255,255,255,0.03));
+    transition: border-color 0.3s ease, transform 0.3s ease;
+  }
+  .chip:hover .chip-icon{ transform: scale(1.06); }
+  .chip-icon svg{ width:18px; height:18px; }
+ 
+  .chip-text{ display:flex; flex-direction:column; gap:3px; }
+  .chip-label{
+    font-family:'JetBrains Mono', monospace;
+    font-size:9.5px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color: var(--muted);
+  }
+  .chip-handle{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:15.5px;
+    font-weight:500;
+    color:#eeeeee;
+  }
+  .chip-arrow{
+    font-size:16px;
+    color: var(--muted);
+    transition: transform 0.3s ease, color 0.3s ease;
+  }
+ 
+  footer{
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid var(--hair);
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:'JetBrains Mono', monospace;
+    font-size:9.5px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color: var(--muted);
+  }
+  footer .mark{ color: var(--accent); }
+ 
+  @media (prefers-reduced-motion: reduce){
+    .chip, .chip-arrow, .chip-icon{ transition:none; }
+  }
+</style>
+</head>
+<body>
+ 
+<div class="grid-bg"></div>
+<div class="glow"></div>
+<div class="grain"></div>
+ 
+<div class="wrap">
+ 
+  <div class="top-tag">
+    <span class="status"><span class="dot"></span>Online profil</span>
+    <span>UZ / 2026</span>
+  </div>
+ 
+  <div class="hero">
+    <div class="id-line">
+      <span class="bracket">//</span>
+      <span class="label">Rasmiy sahifa</span>
+    </div>
+    <h1 class="name">SALMON<br><span class="last">DADAMATOV</span></h1>
+    <p class="tagline">Ijtimoiy tarmoqlardagi rasmiy sahifalarim va loyihalarim shu yerda.</p>
+  </div>
+ 
+  <div class="section-tag">Bog'lanish</div>
+ 
+  <div class="chip-grid">
+ 
+    <a class="chip" style="--brand: linear-gradient(135deg, #f58529, #dd2a7b, #8134af, #515bd4);" href="https://instagram.com/_salmon110_" target="_blank" rel="noopener">
+      <div class="chip-left">
+        <div class="chip-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>
+        </div>
+        <div class="chip-text">
+          <span class="chip-label">Instagram</span>
+          <span class="chip-handle">@_salmon110_</span>
+        </div>
+      </div>
+      <span class="chip-arrow">&#8599;</span>
+    </a>
+ 
+    <a class="chip" style="--brand: linear-gradient(135deg, #1877f2, #42a5f5);" href="https://www.facebook.com/share/17YK2BwTXg/" target="_blank" rel="noopener">
+      <div class="chip-left">
+        <div class="chip-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><path d="M15 3h-2a5 5 0 0 0-5 5v2H6v4h2v7h4v-7h3l1-4h-4V8a1 1 0 0 1 1-1h3z"/></svg>
+        </div>
+        <div class="chip-text">
+          <span class="chip-label">Facebook</span>
+          <span class="chip-handle">Salmon Dadamatov</span>
+        </div>
+      </div>
+      <span class="chip-arrow">&#8599;</span>
+    </a>
+ 
+    <a class="chip" style="--brand: linear-gradient(135deg, #0a66c2, #33a1de);" href="https://uz.linkedin.com/in/salmon225" target="_blank" rel="noopener">
+      <div class="chip-left">
+        <div class="chip-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="3"/><line x1="8" y1="11" x2="8" y2="16"/><circle cx="8" cy="8" r="0.6" fill="#fff"/><path d="M12 16v-3a2 2 0 0 1 4 0v3"/><line x1="12" y1="11" x2="12" y2="16"/></svg>
+        </div>
+        <div class="chip-text">
+          <span class="chip-label">LinkedIn</span>
+          <span class="chip-handle">salmon225</span>
+        </div>
+      </div>
+      <span class="chip-arrow">&#8599;</span>
+    </a>
+ 
+    <a class="chip" style="--brand: linear-gradient(135deg, #26a5e4, #4fc3f7);" href="https://t.me/S110SD" target="_blank" rel="noopener">
+      <div class="chip-left">
+        <div class="chip-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><path d="M22 3 2 11l6 2.2M22 3 15.5 21l-5.4-8"/><path d="M8.2 13.2 22 3"/></svg>
+        </div>
+        <div class="chip-text">
+          <span class="chip-label">Telegram</span>
+          <span class="chip-handle">@S110SD</span>
+        </div>
+      </div>
+      <span class="chip-arrow">&#8599;</span>
+    </a>
+ 
+    <a class="chip" style="--brand: linear-gradient(135deg, #2f7bff, #66a3ff);" href="https://t.me/Spend_uz_bot" target="_blank" rel="noopener">
+      <div class="chip-left">
+        <div class="chip-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 12h8M8 8h8M8 16h5"/></svg>
+        </div>
+        <div class="chip-text">
+          <span class="chip-label">Birinchi loyiham</span>
+          <span class="chip-handle">@Spend_uz_bot</span>
+        </div>
+      </div>
+      <span class="chip-arrow">&#8599;</span>
+    </a>
+ 
+  </div>
+ 
+  <footer>
+    <span>Salmon Dadamatov</span>
+    <span class="mark">&#9670;</span>
+  </footer>
+ 
+</div>
+ 
+</body>
+</html>
